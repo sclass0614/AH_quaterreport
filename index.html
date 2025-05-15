@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>우리집 일상 기록지</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <!-- 엑셀 라이브러리 제거 -->
+    <!-- Supabase 클라이언트 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <!-- Supabase 관련 기능을 정의한 자바스크립트 파일 추가 -->
+    <script src="supabase.js"></script>
+    <!-- 3. authCheck.js (접속 검사) -->
+    <script type="module" src="https://sclass0614.github.io/authCheck/authCheck.js"></script>
+  </head>
+  <body>
+    <div class="print-logo"></div>
+    <div class="container">
+      <!-- 설정 패널 카드 추가 (header 태그 위로 이동) -->
+      <div class="settings-panel">
+        <div class="date-picker">
+          <label for="reportDate">보고서 월 선택:</label>
+          <input type="month" id="reportDate" name="reportDate">
+        </div>
+        <button id="searchButton" class="search-button">조회</button>
+        <div class="member-select-container">
+          <label for="memberSelect">회원 선택:</label>
+          <select id="memberSelect">
+            <option value="all">전체 회원</option>
+          </select>
+        </div>
+        <div class="print-options-container">
+          <div class="print-checkbox-container">
+            <input type="checkbox" id="printDetailData" name="printDetailData" checked>
+            <label for="printDetailData">상세 데이터 카드 인쇄 포함</label>
+          </div>
+          <div class="print-buttons-container">
+            <button id="printSelectedMember" class="print-button">프린트 인쇄하기(선택회원)</button>
+            <button id="printAllMembers" class="print-button">프린트 인쇄하기(전회원)</button>
+          </div>
+        </div>
+      </div>
+      
+      <header>
+        <h1>우리집 일상 기록지</h1>
+      </header>
+
+      <main>
+        <section class="dashboard">
+          <div class="dashboard-item full-width">
+            <h2>우리집 일상활동 유형</h2>
+            <div class="chart-container pie-chart-container" id="categoryChartContainer">
+              <div class="category-charts-row">
+                <div class="category-chart-wrapper">
+                  <h2 style="text-align: center;">이전 3개월 활동</h2>
+                  <div class="no-data-message" id="previousCategoryNoData">기록 없음</div>
+                  <div class="chart-inner-container">
+                    <canvas id="previousCategoryChart"></canvas>
+                  </div>
+                </div>
+                <div class="category-chart-wrapper">
+                  <h2 style="text-align: center;">최근 3개월 활동 분포</h2>
+                  <div class="chart-inner-container">
+                    <canvas id="categoryChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="category-legend-container">
+                <div class="category-legend-item unit-label">
+                  <div class="category-legend-text" style="font-weight: bold;">단위:시간</div>
+                </div>
+                <div class="category-legend-item">
+                  <div class="category-legend-color" style="background-color: #B8CEFF"></div>
+                  <div class="category-legend-text">D1: 학습과지식적용</div>
+                </div>
+                <div class="category-legend-item">
+                  <div class="category-legend-color" style="background-color: #A8E6CF"></div>
+                  <div class="category-legend-text">D2: 일반적과제와요구</div>
+                </div>
+                <div class="category-legend-item">
+                  <div class="category-legend-color" style="background-color: #B8E3EB"></div>
+                  <div class="category-legend-text">D3: 의사소통</div>
+                </div>
+                <div class="category-legend-item">
+                  <div class="category-legend-color" style="background-color: #FFE7A0"></div>
+                  <div class="category-legend-text">D4: 이동</div>
+                </div>
+                <div class="category-legend-item">
+                  <div class="category-legend-color" style="background-color: #FFBCB8"></div>
+                  <div class="category-legend-text">D5: 자기관리</div>
+                </div>
+                <div class="category-legend-item">
+                  <div class="category-legend-color" style="background-color: #CBC0D3"></div>
+                  <div class="category-legend-text">D6: 가정생활</div>
+                </div>
+                <div class="category-legend-item">
+                  <div class="category-legend-color" style="background-color: #C6C9D8"></div>
+                  <div class="category-legend-text">D7: 대인관계</div>
+                </div>
+                <div class="category-legend-item">
+                  <div class="category-legend-color" style="background-color: #D1BDFF"></div>
+                  <div class="category-legend-text">D8: 주요생활영역</div>
+                </div>
+                <div class="category-legend-item">
+                  <div class="category-legend-color" style="background-color: #FFD6B0"></div>
+                  <div class="category-legend-text">D9: 지역사회생활</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-item full-width">
+            <h2>우리집 일상활동</h2>
+            <div class="chart-container">
+              <canvas id="subcategoryChart"></canvas>
+            </div>
+          </div>
+          <div class="dashboard-item full-width">
+            <h2>우리집 일상활동 유형별 참여도·만족도·수행도</h2>
+            <div class="inline-score-legend">
+              <div class="score-legend-item">
+                <div class="score-legend-color" style="background-color: rgba(200, 230, 220, 0.6)"></div>
+                <span>전체</span>
+              </div>
+              <div class="score-legend-item">
+                <div class="score-legend-color" style="background-color: #A8E6CF"></div>
+                <span>회원</span>
+              </div>
+            </div>
+            <div id="scoreChartsContainer" class="score-charts-container">
+              <!-- 대분류별 점수 차트가 여기에 동적으로 추가됩니다 -->
+            </div>
+          </div>
+          <div class="dashboard-item full-width">
+            <h2>우리집 일상활동 세부내역별 참여도·만족도·수행도</h2>
+            <div class="inline-score-legend">
+              <div class="score-legend-item">
+                <div class="score-legend-color" style="background-color: rgba(200, 230, 220, 0.6)"></div>
+                <span>전체</span>
+              </div>
+              <div class="score-legend-item">
+                <div class="score-legend-color" style="background-color: #A8E6CF"></div>
+                <span>회원</span>
+              </div>
+            </div>
+            <div id="subcategoryScoreChartsContainer" class="score-charts-container">
+              <!-- 소분류별 점수 차트가 여기에 동적으로 추가됩니다 -->
+            </div>
+          </div>
+          <div class="dashboard-item full-width">
+            <h2>월별 선호 일상활동 세부내역 [최근 6개월]</h2>
+            <div id="monthlyTopCodesContainer" class="monthly-top-codes-container">
+              <!-- 월별 상위 코드 테이블이 여기에 동적으로 추가됩니다 -->
+            </div>
+          </div>
+          <div class="dashboard-item full-width">
+            <h2>우리집 어르신 활동 일지</h2>
+            <div class="table-container">
+              <table id="dataTable" class="display">
+                <thead>
+                  <tr>
+                    <th>날짜</th>
+                    <th>시작시간</th>
+                    <th>종료시간</th>
+                    <th>세부유형</th>
+                    <th>활동명</th>
+                    <th>참여도</th>
+                    <th>만족도</th>
+                    <th>수행도</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>© 2025 우리집 DayCareCenter. All Rights Reserved.</p>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

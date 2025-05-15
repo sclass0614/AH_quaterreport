@@ -1,0 +1,1026 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+    /* 기본 폰트 크기를 vw 단위로 설정하여 화면 너비에 따라 자동 조정 */
+    font-size: calc(0.8rem + 0.3vw);
+}
+
+html {
+    /* 브라우저 기본 폰트 크기를 뷰포트 너비에 맞게 조정 */
+    font-size: calc(10px + 0.5vw);
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    /* 최소 너비 설정으로 모바일에서도 깨지지 않도록 설정 */
+    min-width: 320px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: calc(0.5rem + 1vw);
+    width: 95%;
+}
+
+header {
+    background-color: #fff;
+    padding: calc(0.5rem + 1vw);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: calc(0.5rem + 0.5vw);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+header h1 {
+    color: #1e7735;
+    margin: 2px;
+    width: 100%;
+    font-size: calc(1.1rem + 1vw);
+}
+
+/* 우리집 텍스트 강조 스타일 */
+.highlight-text {
+    color: #1cc88a;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+    font-size: inherit; /* 부모 요소와 동일한 글꼴 크기 상속 */
+    font-size: calc(1.3rem + 1.3vw); /* 더 크게 설정 */
+    vertical-align: baseline; /* 텍스트 기준선 맞춤 */
+    letter-spacing: 0.05em; /* 자간 추가 */
+    transform: scale(1.1); /* 추가적인 크기 확대 */
+    transform-origin: center bottom; /* 변환 기준점 설정 */
+    padding-left: 8px; /* 좌측 여백 추가 */
+    padding-right: 8px; /* 우측 여백 추가 */
+    margin: 0 5px; /* 좌우 마진 추가 */
+}
+
+/* 밑줄 효과 수정 */
+.highlight-text::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 8px; /* 패딩과 동일한 값으로 조정 */
+    width: calc(100% - 16px); /* 좌우 패딩을 고려하여 너비 조정 */
+    height: 3px;
+    background-color: #1cc88a;
+    border-radius: 2px;
+}
+
+/* 인쇄 시에도 강조 스타일 유지 */
+@media print {
+    .highlight-text {
+        color: #1cc88a !important; /* 화면과 동일한 색상 유지 */
+        font-weight: bold !important;
+        position: relative !important;
+        display: inline-block !important;
+        font-size: inherit !important; /* 부모 요소와 동일한 글꼴 크기 상속 */
+        font-size: 130% !important; /* 인쇄 시 더 크게 설정 */
+        letter-spacing: 0.05em !important; /* 자간 추가 */
+        transform: scale(1.1) !important; /* 추가적인 크기 확대 */
+        transform-origin: center bottom !important; /* 변환 기준점 설정 */
+        padding-left: 6px !important; /* 좌측 여백 추가 */
+        padding-right: 6px !important; /* 우측 여백 추가 */
+        margin: 0 4px !important; /* 좌우 마진 추가 */
+    }
+    
+    /* 인쇄 시 밑줄 효과 수정 */
+    .highlight-text::after {
+        content: '' !important;
+        position: absolute !important;
+        bottom: -2px !important;
+        left: 6px !important; /* 인쇄 시 패딩과 동일한 값으로 조정 */
+        width: calc(100% - 12px) !important; /* 인쇄 시 패딩을 고려하여 너비 조정 */
+        height: 2px !important;
+        background-color: #1cc88a !important; /* 화면과 동일한 색상 유지 */
+        border-radius: 1px !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+
+.member-select-container {
+    margin: calc(0.5rem + 0.3vw) 0;
+}
+
+/* 설정 패널 스타일 */
+.settings-panel {
+    background-color: #f8f9fc;
+    padding: calc(0.8rem + 0.8vw) calc(1rem + 1vw);
+    border-radius: 10px;
+    margin-bottom: calc(0.8rem + 0.8vw);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: calc(0.8rem + 0.8vw);
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e3e6f0;
+}
+
+/* 프린트 버튼 컨테이너 스타일 */
+.print-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: calc(0.4rem + 0.2vw);
+}
+
+/* 프린트 옵션 컨테이너 스타일 */
+.print-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: calc(0.4rem + 0.2vw);
+}
+
+/* 체크박스 컨테이너 스타일 */
+.print-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: calc(0.3rem + 0.1vw);
+    margin-bottom: calc(0.3rem + 0.1vw);
+}
+
+.print-checkbox-container input[type="checkbox"] {
+    width: calc(0.8rem + 0.2vw);
+    height: calc(0.8rem + 0.2vw);
+    accent-color: #28a745;
+    cursor: pointer;
+}
+
+.print-checkbox-container label {
+    font-size: calc(0.7rem + 0.2vw);
+    color: #333;
+    cursor: pointer;
+}
+
+/* 프린트 버튼 스타일 */
+.print-button {
+    padding: calc(0.4rem + 0.3vw);
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: calc(0.7rem + 0.2vw);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+    white-space: nowrap;
+}
+
+.print-button:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+}
+
+/* 공통 스타일 적용을 위해 .member-select-container 선택자 추가 */
+.date-picker, .member-select-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    min-width: 150px;
+}
+
+.date-picker label, .member-select-container label {
+    margin-bottom: calc(0.3rem + 0.3vw);
+    font-weight: 600;
+    color: #2c3e50;
+    display: block;
+    font-size: calc(0.8rem + 0.2vw);
+}
+
+select, input[type="month"] {
+    padding: calc(0.4rem + 0.3vw) calc(0.5rem + 0.3vw);
+    height: calc(2rem + 1vw);
+    border: 1px solid #d1d3e2;
+    border-radius: 6px;
+    width: 100%;
+    font-size: calc(0.7rem + 0.3vw);
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+select:focus, input[type="month"]:focus {
+    border-color: #4e73df;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(78, 115, 223, 0.25);
+}
+
+.search-button {
+    height: calc(2rem + 1vw);
+    padding: 0 calc(1rem + 1vw);
+    background-color: #4e73df;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: calc(0.7rem + 0.3vw);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(78, 115, 223, 0.3);
+    min-width: 100px;
+}
+
+.search-button:hover {
+    background-color: #3756a6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(78, 115, 223, 0.4);
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: calc(0.8rem + 0.8vw);
+}
+
+.dashboard-item {
+    background-color: #fff;
+    padding: calc(0.8rem + 0.8vw);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.chart-container {
+    height: auto;
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    max-width: 100%;
+    min-height: calc(200px + 10vw);
+}
+
+.pie-chart-container {
+    height: auto;
+    max-width: 850px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+    min-height: calc(200px + 10vw);
+}
+
+.full-width .chart-container {
+    height: auto;
+    min-height: calc(200px + 15vw);
+    max-height: calc(300px + 15vw);
+    width: 100%;
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: calc(0.5rem + 0.5vw);
+    font-size: calc(0.9rem + 0.5vw);
+}
+
+.table-container {
+    overflow-x: auto;
+    max-height: none;
+    overflow-y: hidden;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: calc(0.4rem + 0.3vw);
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: calc(0.7rem + 0.3vw);
+}
+
+/* 상세 데이터 테이블의 폰트 크기와 여백 축소 - 브라우저 화면용 */
+#dataTable th, 
+#dataTable td {
+    font-size: calc(0.6rem + 0.2vw);
+    padding: calc(0.3rem + 0.2vw);
+}
+
+table th {
+    background-color: #f2f2f2;
+    position: sticky;
+    top: 0;
+}
+
+table tr:hover {
+    background-color: #f9f9f9;
+}
+
+footer {
+    text-align: center;
+    margin-top: calc(1rem + 1vw);
+    padding: calc(0.8rem + 0.8vw);
+    color: #777;
+}
+
+.section-title {
+    color: #2c3e50;
+    margin: calc(0.8rem + 0.8vw) 0;
+    font-size: calc(1rem + 0.6vw);
+    text-align: left;
+    padding-left: calc(0.4rem + 0.3vw);
+}
+
+.score-header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+}
+
+.score-header h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: calc(0.9rem + 0.5vw);
+    flex-shrink: 0;
+    padding-top: calc(0.4rem + 0.3vw);
+    margin-right: calc(0.4rem + 0.3vw);
+}
+
+.score-charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(33% - 20px), 1fr));
+    gap: calc(0.4rem + 0.3vw);
+    margin-bottom: calc(0.8rem + 0.8vw);
+    width: 100%;
+    max-width: 100%;
+    padding: calc(0.4rem + 0.3vw);
+    overflow: hidden;
+}
+
+.score-chart-item {
+    background-color: #fff;
+    padding: calc(0.6rem + 0.6vw);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    overflow: hidden;
+    margin: 2px;
+    min-height: calc(180px + 5vw);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.score-chart-item h3 {
+    margin-bottom: calc(0.4rem + 0.3vw);
+    font-size: 10pt;
+    color: #2c3e50;
+    text-align: center;
+    padding-bottom: calc(0.2rem + 0.2vw);
+    border-bottom: 1px solid #eee;
+    width: 100%;
+}
+
+/* 차트 컨테이너의 기본 스타일 */
+.score-chart-container {
+    height: calc(170px + 5vw); /* 높이 약간 축소 */
+    position: relative;
+    width: 90%; /* 너비 축소 */
+    max-width: 90%; /* 최대 너비 제한 */
+    overflow: hidden;
+    padding: calc(0.1rem + 0.1vw); /* 패딩 축소 */
+    margin: 0; /* 마진 제거 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.score-legend {
+    display: flex;
+    justify-content: center;
+    margin-top: calc(0.2rem + 0.2vw);
+    gap: calc(0.4rem + 0.3vw);
+    flex-wrap: wrap;
+}
+
+.score-legend-item {
+    display: flex;
+    align-items: center;
+    font-size: calc(0.7rem + 0.2vw);
+}
+
+.score-legend-color {
+    width: calc(0.5rem + 0.2vw);
+    height: calc(0.5rem + 0.2vw);
+    margin-right: calc(0.2rem + 0.1vw);
+    border-radius: 2px;
+}
+
+/* 월별 상위 코드 테이블 스타일 */
+.monthly-top-codes-container {
+    display: flex;
+    flex-direction: column;
+    gap: calc(0.8rem + 0.8vw);
+    width: 100%;
+}
+
+.monthly-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: calc(0.8rem + 0.8vw);
+    flex-wrap: wrap;
+    gap: calc(0.8rem + 0.8vw);
+}
+
+.monthly-table-container {
+    flex: 1;
+    min-width: 280px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: calc(0.6rem + 0.6vw);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.monthly-table-container h3 {
+    text-align: center;
+    margin-bottom: calc(0.6rem + 0.3vw);
+    color: #2c3e50;
+    font-size: calc(0.85rem + 0.3vw); /* 브라우저 화면에서 더 큰 글씨로 표시 */
+    padding-bottom: calc(0.2rem + 0.2vw);
+    border-bottom: 1px solid #eee;
+}
+
+.monthly-top-codes-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.monthly-top-codes-table th,
+.monthly-top-codes-table td {
+    padding: calc(0.3rem + 0.2vw);
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    font-size: calc(0.7rem + 0.2vw);
+}
+
+.monthly-top-codes-table th {
+    font-weight: bold;
+    background-color: #f8f9fc;
+}
+
+.monthly-top-codes-table tr:hover {
+    background-color: #f5f7fb;
+}
+
+.monthly-top-codes-table .rank {
+    font-weight: bold;
+    width: calc(1.2rem + 1vw);
+}
+
+.monthly-top-codes-table .code {
+    width: calc(4rem + 2vw);
+}
+
+.monthly-top-codes-table .duration {
+    width: calc(3rem + 2vw);
+}
+
+.monthly-top-codes-table .percentage {
+    width: calc(2.5rem + 1vw);
+}
+
+.category-charts-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: calc(0.6rem + 0.6vw);
+    min-height: calc(200px + 10vw);
+    flex: 3;
+    width: 100%;
+}
+
+.category-chart-wrapper {
+    flex: 1;
+    min-width: 180px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-inner-container {
+    position: relative;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(150px + 8vw);
+}
+
+.category-chart-wrapper h3 {
+    text-align: center;
+    margin-bottom: calc(0.4rem + 0.3vw);
+    color: #2c3e50;
+    font-size: 10pt;
+    flex: 0 0 auto;
+}
+
+.no-data-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: calc(0.8rem + 0.4vw);
+    color: #6c757d;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: calc(0.6rem + 0.6vw) calc(1.2rem + 1vw);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 10;
+}
+
+.category-chart-wrapper canvas {
+    max-height: calc(180px + 10vw);
+    width: 100%;
+}
+
+/* 대분류별 활동 분포 고정 범례 스타일 */
+.category-legend-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: calc(0.1rem + 0.1vw);
+    margin-top: 5%;
+    margin-bottom: 0;
+    padding: 1%;
+    background-color: #f8f9fc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
+    flex: 0.2;
+}
+
+.category-legend-item {
+    display: flex;
+    align-items: center;
+    margin: calc(0.1rem + 0.1vw);
+    padding: calc(0.2rem + 0.1vw) calc(0.3rem + 0.1vw);
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    height: calc(1rem + 0.5vw);
+    flex: 0 1 auto;
+}
+
+.category-legend-item.unit-label {
+    background-color: #f0f8ff;
+    border: 1px solid #d0e0f0;
+    padding: calc(0.15rem + 0.1vw) calc(0.4rem + 0.2vw);
+    margin-right: calc(0.3rem + 0.1vw);
+}
+
+.category-legend-color {
+    width: calc(0.4rem + 0.2vw);
+    height: calc(0.4rem + 0.2vw);
+    border-radius: 3px;
+    margin-right: calc(0.2rem + 0.1vw);
+}
+
+.category-legend-text {
+    font-size: calc(0.6rem + 0.2vw);
+    font-weight: 500;
+    color: #333;
+    white-space: nowrap;
+}
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        color: #000;
+        width: 210mm;
+        font-size: 11pt;
+    }
+
+    /* 페이지 번호 표시 */
+    @page {
+        margin: 15mm;
+        size: A4;
+    }
+    
+    @page :first {
+        margin-top: 15mm;
+    }
+
+    /* 페이지 번호 표시 제거 */
+    .container::after {
+        display: none;
+    }
+
+    /* 차트 페이지 나누기 방지 */
+    .chart-container, .score-chart-item, .monthly-table-container {
+        page-break-inside: avoid;
+    }
+    
+    /* 기존 코드 */
+    header {
+        display: block;
+        border-radius: 0;
+        box-shadow: none;
+        border: 1px solid #ddd;
+        margin-bottom: 10mm;
+        padding: 0;
+        position: relative;
+    }
+
+    header h1 {
+        margin: 0;
+        padding: 2mm 0;
+        text-align: center;
+    }
+
+    .settings-panel, footer {
+        display: none;
+    }
+
+    .dashboard {
+        display: block;
+        grid-template-columns: none;
+        gap: 0;
+    }
+    
+    /* 페이지 번호 표시 및 여백 설정 */
+    @page {
+        size: A4;
+        margin: 10mm 5mm 15mm 5mm; /* 상 우 하 좌 여백 설정 (하단 여백 증가) */
+
+        
+        @bottom-center {
+            content: "페이지 " counter(page) " / " counter(pages);
+            font-size: 9pt;
+            color: #666;
+            border-top: 0.5pt solid #ccc;
+            padding-top: 2mm;
+            margin-right: 0; /* 로고 공간 확보를 위한 오른쪽 마진 제거 */
+            text-align: center;
+        }
+        
+        @bottom-right {
+            content: " ";
+            background-image: url('images/우리집로고.png');
+            background-repeat: no-repeat;
+            background-size: 40mm 8mm;
+            background-position: right bottom;
+            width: 40mm;
+            height: 8mm;
+            margin-top: 2mm; /* 페이지 번호와 정렬 */
+            padding-right: 5mm;
+            display: block;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+    
+    /* 카드 레이아웃 조정 */
+    .dashboard-item:nth-child(1),
+    .dashboard-item:nth-child(2) {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin-bottom: 5mm;
+        display: block;
+        width: 100%;
+    }
+    
+    /* 두 번째 페이지부터 시작하는 카드들 */
+    .dashboard-item:nth-child(3),
+    .dashboard-item:nth-child(4),
+    .dashboard-item:nth-child(5),
+    .dashboard-item:nth-child(6) {
+        display: block;
+        width: 100%;
+    }
+    
+    /* 두 번째 페이지부터 시작하는 첫 번째 카드 */
+    .dashboard-item:nth-child(3) {
+        page-break-before: always; /* 두 번째 페이지에서 시작 */
+        margin-top: 0;
+    }
+    
+    /* 두 번째 페이지 이후의 카드들은 연속적으로 인쇄 */
+    .dashboard-item:nth-child(n+3) {
+        page-break-inside: auto; /* 페이지 내에서 자유롭게 나누기 */
+        break-inside: auto;
+        margin-bottom: 5mm;
+        padding: 5mm;
+        border: 1px solid #ddd;
+        box-shadow: none;
+        width: 100%;
+    }
+    
+    /* 월별 상위 활동 코드 카드 특별 처리 */
+    .dashboard-item:nth-child(5) {
+        page-break-before: auto !important; /* 상위 규칙 덮어쓰기 */
+        page-break-inside: auto !important; /* 페이지에서 자유롭게 분할 허용 */
+        break-inside: auto !important;
+    }
+    
+    /* 대분류별 및 소분류별 점수 차트 컨테이너 (인쇄 시) */
+    .score-charts-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1mm; /* 간격 축소 */
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin-top: 2mm; /* 상단 마진 추가 */
+        overflow: visible; /* 인쇄 시 오버플로우 허용 */
+    }
+    
+    /* 점수 차트 아이템이 잘리지 않도록 높이 조정 */
+    .score-chart-item {
+        padding: 3mm 3mm 2mm 3mm; /* 하단 패딩 축소 */
+        margin: 0;
+        height: auto;
+        min-height: 0;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* 점수 차트 컨테이너 높이 조정 (인쇄 시) */
+    .score-chart-container {
+        height: auto;
+        min-height: 38mm;
+        max-height: 45mm;
+        width: 95%;
+        max-width: 95%;
+        padding: 0 0 1mm 0; /* 패딩 축소 */
+        overflow: visible;
+        margin: 0; /* 마진 제거 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* 차트 캔버스가 잘리지 않도록 설정 */
+    canvas {
+        max-height: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin-bottom: 0 !important; /* 마진 제거 */
+    }
+
+    /* X축과 Y축 텍스트가 잘리지 않도록 설정 */
+    .chartjs-render-monitor {
+        margin-bottom: 0 !important; /* 마진 제거 */
+        overflow: visible !important;
+    }
+    
+    /* 상세 데이터 테이블 컨테이너 */
+    .table-container {
+        overflow: visible !important;
+        max-height: none !important;
+        overflow-y: hidden !important;
+    }
+
+    /* 월별 상위 활동 코드 관련 스타일 */
+    .monthly-top-codes-container {
+        page-break-inside: auto !important; /* 콘텐츠가 페이지 경계에서 분할 허용 */
+        break-inside: auto !important;
+        page-break-before: auto; /* 자동으로 페이지 나누기 결정 */
+        position: relative; /* 위치 설정 추가 */
+        display: block; /* 표시 방식 변경 */
+        margin-top: 0 !important; /* 상단 여백 제거 */
+    }
+
+    .monthly-row {
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+        margin-bottom: 5mm;
+        display: flex;
+        width: 100%;
+    }
+
+    .monthly-table-container {
+        page-break-inside: auto;
+        break-inside: auto;
+        min-height: 0;
+        height: auto;
+    }
+    
+    /* 인쇄 시 배경색과 색상 강제 적용 */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    /* 카테고리 차트 행의 배치 설정 */
+    .category-charts-row {
+        flex-wrap: nowrap !important;
+        width: 100%;
+    }
+    
+    .category-chart-wrapper {
+        width: 50% !important;
+        min-width: 0 !important;
+    }
+
+    /* 차트 라벨이 잘리지 않도록 설정 */
+    .chartjs-size-monitor, .chartjs-render-monitor {
+        overflow: visible !important;
+    }
+
+    /* 차트 엘리먼트에 특화된 설정 */
+    #scoreChartsContainer canvas,
+    #subcategoryScoreChartsContainer canvas {
+        margin-top: -2mm !important;
+        height: 35mm !important; /* 38mm에서 축소 */
+        width: 95% !important; /* 너비 제한 추가 */
+    }
+    
+    /* 차트의 X축 라벨이 잘 보이도록 설정 */
+    .chartjs-axis-labels {
+        visibility: visible !important;
+        margin-top: -2mm !important;
+        font-size: 8pt !important;
+        font-weight: bold !important;
+    }
+
+    /* datalabels 플러그인이 인쇄 시에도 잘 보이게 설정 */
+    .chartjs-datalabels {
+        color: #000 !important;
+        font-weight: bold !important;
+        font-size: 9pt !important;
+    }
+
+    /* 상세 데이터 카드(마지막 카드) 여백 제거 */
+    .dashboard-item:last-child {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    
+    /* 상세 데이터 테이블 컨테이너 */
+    .table-container {
+        overflow: visible !important;
+        max-height: none !important;
+        overflow-y: hidden !important;
+        margin-bottom: 0 !important;
+    }
+    
+    /* 상세 데이터 테이블 폰트 크기 축소 */
+    #dataTable th, 
+    #dataTable td {
+        font-size: 8pt !important;
+        padding: 2px 4px !important;
+    }
+    
+    #dataTable th {
+        font-weight: bold;
+    }
+
+    /* 인쇄 시 월별 상위 활동코드 테이블 제목 크기 */
+    .monthly-table-container h3 {
+        font-size: 10pt !important; /* 인쇄 시 원래 크기 유지 */
+    }
+
+    .dashboard-item h2 {
+        background: linear-gradient(to right, #98D7C2, #E0F5F1) !important;
+        color: #2c5050 !important;
+        padding: 6px 10px !important;
+        margin: -5mm -5mm 3mm -5mm !important;
+        width: calc(100% + 10mm) !important;
+        border-bottom: 2px solid #6ECEB2 !important;
+        border-radius: 5px 5px 0 0 !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    .period-text {
+        color: #2c5050 !important;
+    }
+    
+    /* 이전 h2 스타일 관련 코드 재정의 */
+    .category-chart-wrapper h2 {
+        text-align: center !important;
+        background: none !important;
+        color: #2c3e50 !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 0 5px 0 !important;
+        width: auto !important;
+        font-weight: bold !important;
+    }
+}
+
+/* 소분류 차트 컨테이너 */
+#subcategoryChart {
+    max-width: 100%;
+    height: auto !important;
+}
+
+/* 대분류/소분류 차트 인라인 범례 스타일 */
+.dashboard-item h2 {
+    display: block;
+    margin-right: calc(0.6rem + 0.3vw);
+    font-size: calc(0.9rem + 0.5vw);
+    /* 카드 제목 디자인 개선 - 띠 스타일 (밝은 민트색) */
+    background: linear-gradient(to right, #98D7C2, #E0F5F1);
+    color: #2c5050;
+    padding: calc(0.5rem + 0.3vw) calc(0.8rem + 0.5vw);
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: calc(-0.8rem - 0.8vw) calc(-0.8rem - 0.8vw) calc(1rem + 0.5vw) calc(-0.8rem - 0.8vw);
+    position: relative;
+    font-weight: bold;
+    width: calc(100% + 1.6rem + 1.6vw);
+    text-align: left;
+    border-bottom: 3px solid #6ECEB2;
+    border-radius: 10px 10px 0 0;
+}
+
+/* 카드 제목 내부의 기간 텍스트 스타일 수정 */
+.period-text {
+    font-size: calc(0.7rem + 0.2vw);
+    color: #2c5050;
+    font-weight: normal;
+    margin-left: calc(0.4rem + 0.3vw);
+}
+
+/* 차트 wrapper의 h2 스타일 예외 처리 */
+.category-chart-wrapper h2 {
+    text-align: center;
+    background: none;
+    color: #2c3e50;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0 0 calc(0.3rem + 0.2vw) 0;
+    width: auto;
+    font-size: calc(0.8rem + 0.4vw);
+}
+
+.inline-score-legend {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(0.4rem + 0.3vw);
+    vertical-align: middle;
+    margin-left: calc(0.6rem + 0.3vw);
+    flex-wrap: wrap;
+}
+
+.inline-score-legend .score-legend-item {
+    display: flex;
+    align-items: center;
+    font-size: calc(0.7rem + 0.2vw);
+}
+
+.inline-score-legend .score-legend-color {
+    width: calc(0.5rem + 0.2vw);
+    height: calc(0.5rem + 0.2vw);
+    margin-right: calc(0.2rem + 0.1vw);
+    border-radius: 2px;
+}
+
+/* 차트 엘리먼트에 특화된 설정 */
+#scoreChartsContainer canvas,
+#subcategoryScoreChartsContainer canvas {
+    margin-top: -2mm !important;
+    height: 38mm !important;
+}
+
+/* 로고 인쇄 전용 요소 - 기본적으로 숨김 */
+.print-logo {
+    display: none;
+}
