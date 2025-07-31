@@ -20,20 +20,38 @@ async function getJournalAll() {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
     
-    const { data, error } = await supabaseClient
-      .from('activities_journal')
-      .select('*')
-      .limit(100000); // 10만개까지 데이터 불러오기
-
-    if (error) {
-      console.error('일지 데이터 로드 오류:', error);
-      return [];
+    // 페이지네이션을 사용하여 모든 데이터를 가져오기
+    let allData = [];
+    let page = 0;
+    const pageSize = 1000; // 한 번에 가져올 데이터 수
+    
+    while (true) {
+      const { data, error } = await supabaseClient
+        .from('activities_journal')
+        .select('*')
+        .range(page * pageSize, (page + 1) * pageSize - 1);
+      
+      if (error) {
+        console.error('일지 데이터 로드 오류:', error);
+        break;
+      }
+      
+      if (!data || data.length === 0) {
+        break; // 더 이상 데이터가 없으면 종료
+      }
+      
+      allData = allData.concat(data);
+      page++;
+      
+      // 10만개 제한 (안전장치)
+      if (allData.length >= 100000) {
+        console.log("10만개 데이터 제한에 도달했습니다.");
+        break;
+      }
     }
 
-    console.log("변환 전:", data); // 변환 전 데이터 확인
-
-    console.log("변환 후:", formattedData); // 변환 후 데이터 확인
-    return formattedData;
+    console.log("총 데이터 개수:", allData.length);
+    return allData;
   } catch (error) {
     console.error('오류 발생:', error);
     return [];
@@ -77,20 +95,43 @@ async function getJournalSelected(selectedYearMonth) {
       });
     }
     
-    // 날짜 범위에 해당하는 데이터 조회 (YYYYMM 형식으로 날짜 앞 6자리 비교)
-    const { data, error } = await supabaseClient
-      .from('activities_journal')
-      .select('*')
-      .or(dateRanges.map(date => `and(날짜.gte.${date.yearMonth}01,날짜.lte.${date.yearMonth}31)`).join(','))
-      .limit(100000); // 10만개까지 데이터 불러오기
+    // 페이지네이션을 사용하여 날짜 범위에 해당하는 모든 데이터를 가져오기
+    let allData = [];
+    let page = 0;
+    const pageSize = 1000; // 한 번에 가져올 데이터 수
+    
+    while (true) {
+      const { data, error } = await supabaseClient
+        .from('activities_journal')
+        .select('*')
+        .or(dateRanges.map(date => `and(날짜.gte.${date.yearMonth}01,날짜.lte.${date.yearMonth}31)`).join(','))
+        .range(page * pageSize, (page + 1) * pageSize - 1);
+      
+      if (error) {
+        console.error('일지 데이터 로드 오류:', error);
+        break;
+      }
+      
+      if (!data || data.length === 0) {
+        break; // 더 이상 데이터가 없으면 종료
+      }
+      
+      allData = allData.concat(data);
+      page++;
+      
+      // 10만개 제한 (안전장치)
+      if (allData.length >= 100000) {
+        console.log("10만개 데이터 제한에 도달했습니다.");
+        break;
+      }
+    }
 
-    if (error) {
-      console.error('일지 데이터 로드 오류:', error);
+    if (allData.length === 0) {
       return { threeMonthData: [], threeMonthData_previous: [], sixMonthData: [] };
     }
     
     // 최근 3개월 데이터 필터링
-    const threeMonthData = data.filter(row => {
+    const threeMonthData = allData.filter(row => {
       if (!row['날짜']) return false;
       
       const dateStr = row['날짜'].toString().padStart(8, '0');
@@ -101,7 +142,7 @@ async function getJournalSelected(selectedYearMonth) {
     });
     
     // 이전 3개월 데이터 필터링 (인덱스 3-5, 즉 4번째~6번째 월)
-    const threeMonthData_previous = data.filter(row => {
+    const threeMonthData_previous = allData.filter(row => {
       if (!row['날짜']) return false;
       
       const dateStr = row['날짜'].toString().padStart(8, '0');
@@ -112,7 +153,7 @@ async function getJournalSelected(selectedYearMonth) {
     });
     
     // 6개월 데이터는 원본 데이터 그대로 사용
-    const sixMonthData = data;
+    const sixMonthData = allData;
     
     console.log("최근 3개월 데이터:", threeMonthData.length);
     console.log("이전 3개월 데이터:", threeMonthData_previous.length);
