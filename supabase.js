@@ -22,7 +22,8 @@ async function getJournalAll() {
     
     const { data, error } = await supabaseClient
       .from('activities_journal')
-      .select('*');
+      .select('*')
+      .limit(100000); // 10만개까지 데이터 불러오기
 
     if (error) {
       console.error('일지 데이터 로드 오류:', error);
@@ -80,7 +81,8 @@ async function getJournalSelected(selectedYearMonth) {
     const { data, error } = await supabaseClient
       .from('activities_journal')
       .select('*')
-      .or(dateRanges.map(date => `and(날짜.gte.${date.yearMonth}01,날짜.lte.${date.yearMonth}31)`).join(','));
+      .or(dateRanges.map(date => `and(날짜.gte.${date.yearMonth}01,날짜.lte.${date.yearMonth}31)`).join(','))
+      .limit(100000); // 10만개까지 데이터 불러오기
 
     if (error) {
       console.error('일지 데이터 로드 오류:', error);
