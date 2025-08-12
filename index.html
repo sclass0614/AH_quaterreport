@@ -7,18 +7,13 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <!-- 엑셀 라이브러리 제거 -->
-    <!-- Supabase 클라이언트 추가 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    <!-- Supabase 관련 기능을 정의한 자바스크립트 파일 추가 -->
     <script src="supabase.js"></script>
-    <!-- 3. authCheck.js (접속 검사) -->
     <script type="module" src="https://sclass0614.github.io/authCheck/authCheck.js"></script>
   </head>
   <body>
     <div class="print-logo"></div>
     <div class="container">
-      <!-- 설정 패널 카드 추가 (header 태그 위로 이동) -->
       <div class="settings-panel">
         <div class="date-picker">
           <label for="reportDate">보고서 월 선택:</label>
@@ -129,7 +124,6 @@
               </div>
             </div>
             <div id="scoreChartsContainer" class="score-charts-container">
-              <!-- 대분류별 점수 차트가 여기에 동적으로 추가됩니다 -->
             </div>
           </div>
           <div class="dashboard-item full-width">
@@ -145,13 +139,11 @@
               </div>
             </div>
             <div id="subcategoryScoreChartsContainer" class="score-charts-container">
-              <!-- 소분류별 점수 차트가 여기에 동적으로 추가됩니다 -->
             </div>
           </div>
           <div class="dashboard-item full-width">
             <h2>월별 선호 일상활동 세부내역 [최근 6개월]</h2>
             <div id="monthlyTopCodesContainer" class="monthly-top-codes-container">
-              <!-- 월별 상위 코드 테이블이 여기에 동적으로 추가됩니다 -->
             </div>
           </div>
           <div class="dashboard-item full-width">
